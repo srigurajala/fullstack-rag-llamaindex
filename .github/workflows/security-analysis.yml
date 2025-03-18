@@ -20,7 +20,7 @@ jobs:
       - name: Upload Changed Files for Analysis
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            curl -X POST "http://localhost:8000/ci-analyze" \
+            curl -X POST "https://ai-code-analyzer-production.up.railway.app:8000/ci-analyze" \
               -F "files=@$file" 
           done
 
