@@ -1,0 +1,30 @@
+name: Security Analysis CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Get Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+
+      - name: Upload Changed Files for Analysis
+        run: |
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            curl -X POST "http://your-backend-url/ci-analyze" \
+              -F "files=@$file" 
+          done
+
+      - name: Post Analysis Results to PR
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: "Security Analysis Results: Check backend logs or response from API."
